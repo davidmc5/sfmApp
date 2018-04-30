@@ -21,7 +21,7 @@
         </activity>
 
         <activity
-            android:name=".DetailMenu"
+            android:name=".ItemsActivity"
             android:label="Select Item"
             android:parentActivityName=".MainActivity">
             <meta-data

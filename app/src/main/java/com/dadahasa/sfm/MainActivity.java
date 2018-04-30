@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.dadahasa.sfm.MainAdapter.MainAdapterOnClickHandler;
 
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainAdapterOnClic
     @Override
     public void onClick(String menuItem) {
         Context context = this;
-        Class destinationClass = DetailMenu.class;
+        Class destinationClass = ItemsActivity.class;
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
         // COMPLETED (1) Pass the weather to the DetailActivity
         intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, menuItem);

@@ -9,7 +9,7 @@ import android.widget.TextView;
  * Created by David on 2/14/2018.
  */
 
-public class DetailMenu extends AppCompatActivity{
+public class ItemsActivity extends AppCompatActivity{
 
     private String mDetail;
     private TextView mDetailDisplay;
@@ -18,6 +18,8 @@ public class DetailMenu extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bin_items);
+
+       //setTitle("KaKa");
 
         mDetailDisplay = (TextView) findViewById(R.id.tv_bin_items);
 
@@ -28,6 +30,9 @@ public class DetailMenu extends AppCompatActivity{
             if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
                 mDetail = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
                 mDetailDisplay.setText(mDetail);
+
+                //Set the title of the activity to the item selected in the main activity
+                setTitle(mDetail);
             }
         }
     }
