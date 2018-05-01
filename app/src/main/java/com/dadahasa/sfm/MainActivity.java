@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends AppCompatActivity {
 
 //    private Toolbar toolbar;
@@ -18,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mBinButton;
 
+   //private FirebaseDatabase mFirebaseDatabase;
+    //private DatabaseReference mDatabase;
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         //setContentView(R.layout.tabs_view);
         setContentView(R.layout.activity_main);
         mBinButton = (Button) findViewById(R.id.button1);
+
+        //mDatabase = FirebaseDatabase.getInstance().getReference();
+        //mDatabase.child("users").child("hello").setValue("1234");
     }
 
 

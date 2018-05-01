@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 /**
  * Created by David on 2/21/2018.
@@ -26,11 +29,26 @@ public class BinActivity extends AppCompatActivity implements View.OnClickListen
     //private Button button_A;
     //private Button button_B;
 
+    //firebase
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tabs_view);
+
+        //firebase
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        //mDatabase.child("users").child("goodby").setValue("8888");
+        //mDatabase.child("users").child("goodby").setValue(null); //this deletes the entry
+        mDatabase.child("users").child("goodby").setValue("asterix");
+       // mDatabase.child("users").child("hello").setValue(null);
+        mDatabase.child("users").child("hello").setValue("filomena");
+
+
 
 
         //put this in a new class and start with an intent from BIN button
@@ -47,6 +65,8 @@ public class BinActivity extends AppCompatActivity implements View.OnClickListen
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+
 
     }
 
