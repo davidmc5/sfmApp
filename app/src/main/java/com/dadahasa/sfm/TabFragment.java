@@ -10,12 +10,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class TabFragment extends Fragment {
 
     int position;
     private TextView textView;
+    private Switch binAugerSw;
 
     public static Fragment getInstance(int position) {
         Bundle bundle = new Bundle();
@@ -35,14 +37,23 @@ public class TabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tab, container, false);
+        //changed for listener (declared as final to access it from anonymous inner class:
+        //final View rootView = inflater.inflate(R.layout.fragment_tab, container, false);
+
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        textView = (TextView) view.findViewById(R.id.binId);
 
+        //set widgets
+        textView = (TextView) view.findViewById(R.id.binId);
         textView.setText("Bin " + (position + 1));
+
+        binAugerSw = (Switch) view.findViewById(R.id.binAuger);
+        binAugerSw.setChecked(true);
+
 
     }
 }
