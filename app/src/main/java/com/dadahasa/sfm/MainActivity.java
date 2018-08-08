@@ -75,9 +75,11 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null){
                     // user is signed in
                     onSignedInInitialize(user.getDisplayName());
+                /*
                     Toast.makeText(MainActivity.this,
                                     "You're now signed in!",
                                     Toast.LENGTH_SHORT).show();
+                */
                 } else {
                     //user is signed out
                     //paste here the desired api call for the sign in flow
