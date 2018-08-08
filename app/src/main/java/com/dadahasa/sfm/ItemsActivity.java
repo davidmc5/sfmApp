@@ -19,13 +19,10 @@ public class ItemsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bin_items);
 
-       //setTitle("KaKa");
-
         mDetailDisplay = (TextView) findViewById(R.id.tv_bin_items);
 
         Intent intentThatStartedThisActivity = getIntent();
 
-        // COMPLETED (2) Display the weather forecast that was passed from MainActivity
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
                 mDetail = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
