@@ -86,7 +86,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVie
     @Override
     public MainAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.menu_item;
+        int layoutIdForListItem = R.layout.main_menu_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 

@@ -1,6 +1,5 @@
 package com.dadahasa.sfm;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -53,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.tabs_view);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.bin_tabs);
+        setContentView(R.layout.main_activity);
         mBinButton = (Button) findViewById(R.id.button1);
 
         //mDatabase = FirebaseDatabase.getInstance().getReference();

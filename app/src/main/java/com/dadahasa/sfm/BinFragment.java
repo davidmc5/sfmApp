@@ -51,7 +51,7 @@ public class BinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tab, container, false);
+        return inflater.inflate(R.layout.bin_fragment, container, false);
     }
 
     @Override
@@ -76,14 +76,14 @@ public class BinFragment extends Fragment {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
+                // This method is called once when first attaching the listener and again
                 // whenever data at this location is updated.
                 Boolean value1, value2;
                 DataSnapshot rootData = dataSnapshot.child("controllers").child(THIS_CONTROLLER);
 
                 try {
                     value1 = rootData.child("bin_1_sw_1").getValue(Boolean.class);
-                    value2 = dataSnapshot.child("controllers").child("c_1").child("bin_2_sw_1").getValue(Boolean.class);
+                    value2 = rootData.child("bin_2_sw_1").getValue(Boolean.class);
                 }catch(Exception e){
                     value1 = false;
                     value2 = false;
@@ -108,17 +108,24 @@ public class BinFragment extends Fragment {
         });
     }
 
+
+    //this class updates the firebase database switch status
+    // when a switch in one of the bin tabs has been clicked
     class SwitchStatus implements CompoundButton.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            Log.d("database", "SW ID: " + buttonView.getId());
+            //Log.d("database", "SW ID: " + buttonView.getId());
+
+
 
             switch (buttonView.getId()) {
 
                 case R.id.binAuger:
+
                     //TODO For some unknown reason, this toast causes a crash after a few  toggles of the switch
                    //Toast.makeText(getContext(), "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
+
                     if(position ==0) {
                         mDatabase.child("controllers").child("c_1").child("bin_1_sw_1").setValue(isChecked);
                     }else if(position ==1) {

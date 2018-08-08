@@ -28,7 +28,7 @@ public class BinActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tabs_view);
+        setContentView(R.layout.bin_tabs);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
