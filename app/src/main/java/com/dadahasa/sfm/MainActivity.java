@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 //    private TabLayout tabLayout;
 //    private ViewPager viewPager;
 
-    private Button mBinButton;
+    //private Button mBinButton;
 
 
     ////used for authentication
@@ -52,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.bin_tabs);
-        setContentView(R.layout.main_activity);
-        mBinButton = findViewById(R.id.button1);
+        //setContentView(R.layout.main_activity);
+        setContentView(R.layout.single_main_activity);
+        //mBinButton = findViewById(R.id.button1);
 
 
         //// Initialize Firebase Components
@@ -72,11 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null){
                     // user is signed in
                     onSignedInInitialize(user.getDisplayName());
-                /*
-                    Toast.makeText(MainActivity.this,
-                                    "You're now signed in!",
-                                    Toast.LENGTH_SHORT).show();
-                */
                 } else {
                     //user is signed out
                     //paste here the desired api call for the sign in flow

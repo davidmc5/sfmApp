@@ -2,16 +2,18 @@
 
 
 <ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="100dp"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="10dp"
     android:id="@+id/single_activity"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingEnd="20dp">
 
         <TextView
             android:id="@+id/switches"
@@ -19,98 +21,52 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="10dp"
+            android:text="Devices"
             android:textSize="40sp"
-            android:textStyle="bold"
-            android:text=""/>
+            android:textStyle="bold" />
 
         <Switch
             android:id="@+id/sw_1"
-            android:text="sw_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_1" />
+
         <Switch
             android:id="@+id/sw_2"
-            android:text="sw_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_2" />
 
         <Switch
             android:id="@+id/sw_3"
-            android:text="sw_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_3" />
 
         <Switch
             android:id="@+id/sw_4"
-            android:text="sw_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_4" />
 
         <Switch
             android:id="@+id/sw_5"
-            android:text="sw_5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_5" />
 
         <Switch
             android:id="@+id/sw_6"
-            android:text="sw_6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_6" />
 
         <Switch
             android:id="@+id/sw_7"
-            android:text="sw_7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_7" />
 
         <Switch
             android:id="@+id/sw_8"
-            android:text="sw_8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:scaleX="1"
-            android:scaleY="1.5"
-            android:layout_gravity="center"
-            android:checked="false"/>
+            style="@style/SingleSwitches"
+            android:text="sw_8" />
 
     </LinearLayout>
+
 </ScrollView>
 
 
