@@ -92,7 +92,7 @@ public class BinFragment extends Fragment {
                     //TODO set default switch value in the database.
                 }
                 //Log.d("database", "Value is: " + value);
-
+                //There is a problem here that, crashes with null pointer when clicking at BINs
                 if(position ==0) {
                     s1.setChecked(value1);
                 }else if (position == 1){
