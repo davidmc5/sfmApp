@@ -54,10 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         //setContentView(R.layout.bin_tabs);
         setContentView(R.layout.main_activity);
-        mBinButton = (Button) findViewById(R.id.button1);
+        mBinButton = findViewById(R.id.button1);
 
-        //mDatabase = FirebaseDatabase.getInstance().getReference();
-        //mDatabase.child("users").child("hello").setValue("1234");
 
         //// Initialize Firebase Components
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -188,9 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void openBinIntent(View view){
-        //Toast.makeText(getApplicationContext(),"BINS!", Toast.LENGTH_SHORT).show();
         Intent binViewIntent = new Intent(getApplicationContext(),BinActivity.class);
-        //inIntent.putExtra("Button", "Bins");
         startActivity(binViewIntent);
     }
     public void notImplemented(View view){

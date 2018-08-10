@@ -11,7 +11,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="Smart Farm" >
+            android:label="Smart Farm"
+            android:launchMode="singleTop"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +25,8 @@
         <activity
             android:name=".BinActivity"
             android:parentActivityName=".MainActivity"
-            android:label="BINS">
+            android:label="BINS"
+            android:launchMode="singleTop">
         </activity>
 
     </application>
