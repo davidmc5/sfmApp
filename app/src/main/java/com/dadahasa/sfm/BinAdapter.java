@@ -10,7 +10,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 class BinAdapter extends FragmentPagerAdapter {
 
-    private String title[] = {"1", "2", "3", "4"};
+    //private String title[] = {"1", "2", "3", "4"};
+    private String title[] = {"Farm Devices"};
 
     public BinAdapter(FragmentManager manager) {
         super(manager);

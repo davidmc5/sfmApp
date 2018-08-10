@@ -5,6 +5,7 @@ package com.dadahasa.sfm;
  */
 
 import android.os.Bundle;
+import android.sax.RootElement;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -35,9 +36,11 @@ public class BinFragment extends Fragment {
 
     //controller id hardcoded! Read it instead from the app's shared preferences.
     //TODO add a settings menu to enter the controller's ID.
-    final String THIS_CONTROLLER = "c_1";
+    final String THIS_CONTROLLER = "6123286909";
     String thisBin;
     String ROOT_CHILD = "controllers/" + THIS_CONTROLLER + "/";
+    String SWITCHES = ROOT_CHILD + "switches/";
+    String LABELS = ROOT_CHILD + "labels/";
     DataSnapshot rootData;
 
     public static BinFragment getInstance(int position) {
@@ -78,7 +81,9 @@ public class BinFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.bin_fragment, container, false);
+        //TODO changed for single activity
+        //return inflater.inflate(R.layout.bin_fragment, container, false);
+        return inflater.inflate(R.layout.single_main_activity, container, false);
     }
 
     @Override
@@ -91,24 +96,18 @@ public class BinFragment extends Fragment {
 
 ////
         //ViewPager mViewPager = getActivity().findViewById(R.id.viewPager);
-
-
         //position = mViewPager.getCurrentItem();
-
         //position = getArguments().getInt("pos");
-
 ////
 
         thisBin = "bin_" + String.valueOf(position+1) + '_';
-
-
-
 
         textView = view.findViewById(R.id.binId);
 
         //TODO get bin label from firebase
         Log.d("POSITION", "\n############# TRALARA: " + position + "\n");
-        textView.setText("Bin " + String.valueOf(position + 1));
+        //TODO removed for single activity
+        //textView.setText("Bin " + String.valueOf(position + 1));
         //Log.d("POSITION", "\n############# POSITION: " + position + "\n");
 
 
@@ -118,7 +117,10 @@ public class BinFragment extends Fragment {
         //Collect all the switches (touchables) of the view in an array
         //https://stackoverflow.com/questions/22639218/how-to-get-all-buttons-ids-in-one-time-on-android
         final ArrayList<View> allSwitches;
-        allSwitches = (getView().findViewById(R.id.switch_container)).getTouchables();
+
+        //TODO replaced for single activity
+        //allSwitches = (getView().findViewById(R.id.switch_container)).getTouchables();
+        allSwitches = (getView().findViewById(R.id.single_activity)).getTouchables();
         //Log.d("SMF", "The number of switches is " + allSwitches.size());
 
         //Look to set the SwitchState listener to all switches
@@ -141,6 +143,7 @@ public class BinFragment extends Fragment {
                 // whenever data at this location is updated.
 
                 Boolean value;
+                String label;
 
                 rootData = dataSnapshot.child("controllers").child(THIS_CONTROLLER);
                 Switch sw;
@@ -150,17 +153,29 @@ public class BinFragment extends Fragment {
 
                     try {
                         //get switch state from database (if any)
-                        value = dataSnapshot.child(ROOT_CHILD + thisBin + "sw_" + String.valueOf(i+1)).getValue(Boolean.class);
+                        value = dataSnapshot.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).getValue(Boolean.class);
                         //and set the state of the UI switch to match the one on the database
                         sw.setChecked(value);
                         //Log.d("HELLO", "\n############# THIS BIN: " + thisBin + "\n\");
 
                     } catch (Exception e) {
                         //Log.d("database", "EXCEPTION -------- >>>>>: " + value);
-                        //TODO set default switch value false in the database if the switch does not exist.
-                        //maybe this is done automatically by the listener on first attach (SwitchState)?
-                        //No... the listener currently is only set for changes, not additions.
-                        mDatabase.child(ROOT_CHILD + thisBin + "sw_" + String.valueOf(i+1)).setValue(false);
+                        //set default switch value false in the database if the switch does not exist.
+                        //the listener currently is only set for changes, not additions.
+                        mDatabase.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).setValue(false);
+                    }
+
+                    try {
+                        label = dataSnapshot.child(LABELS + thisBin + "sw_" + String.valueOf(i + 1)).getValue(String.class);
+                        //and set the label of the UI switch to match the one on the database
+                        if (!label.equals("")) {
+                            sw.setText(label);
+                        }
+                    }catch (Exception e){
+                        //Since label is missing, add a generic label stub to edit later
+
+                        String newLabel = "sw_" + String.valueOf(i+1);
+                        mDatabase.child(LABELS + thisBin + newLabel).setValue(newLabel);
                     }
                 }
             }
@@ -187,33 +202,40 @@ public class BinFragment extends Fragment {
             switch (buttonView.getId()) {
 
                 case R.id.bin_sw_1:
-                    //TODO For some unknown reason, this toast causes a crash after a few  toggles of the switch
+                    //TODO For some unknown reason, this toast causeD crashes after a few toggles of the switch
                     //Toast.makeText(getContext(), "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
-                    mDatabase.child(ROOT_CHILD + thisBin + "sw_1").setValue(isChecked);
+                    mDatabase.child(SWITCHES + thisBin + "sw_1").setValue(isChecked);
                     break;
 
                 case R.id.bin_sw_2:
-                    mDatabase.child(ROOT_CHILD + thisBin + "sw_2").setValue(isChecked);
+                    mDatabase.child(SWITCHES  + thisBin + "sw_2").setValue(isChecked);
                     break;
 
                 case R.id.bin_sw_3:
-                    mDatabase.child(ROOT_CHILD + thisBin + "sw_3").setValue(isChecked);
+                    mDatabase.child(SWITCHES  + thisBin + "sw_3").setValue(isChecked);
                     break;
 
                 case R.id.bin_sw_4:
-                    mDatabase.child(ROOT_CHILD + thisBin + "sw_4").setValue(isChecked);
+                    mDatabase.child(SWITCHES  + thisBin + "sw_4").setValue(isChecked);
                     break;
 
                 case R.id.bin_sw_5:
-                    mDatabase.child(ROOT_CHILD + thisBin + "sw_5").setValue(isChecked);
+                    mDatabase.child(SWITCHES  + thisBin + "sw_5").setValue(isChecked);
                     break;
 
                 case R.id.bin_sw_6:
-                    mDatabase.child(ROOT_CHILD + thisBin + "sw_6").setValue(isChecked);
+                    mDatabase.child(SWITCHES  + thisBin + "sw_6").setValue(isChecked);
                     break;
 
                 case R.id.bin_sw_7:
-                    mDatabase.child(ROOT_CHILD + thisBin + "sw_7").setValue(isChecked);
+                    mDatabase.child(SWITCHES  + thisBin + "sw_7").setValue(isChecked);
+                    break;
+
+                case R.id.bin_sw_8:
+                    mDatabase.child(SWITCHES  + thisBin + "sw_8").setValue(isChecked);
+                    break;
+
+                default:
                     break;
 
             }

@@ -26,9 +26,10 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:onClick="openBinIntent"
-                android:text="Bins" />
+                android:text="Devices" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/button2"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
@@ -44,6 +45,7 @@
                 android:text="Dryers" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/button3"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
@@ -59,6 +61,7 @@
                 android:text="Pits" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/button4"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
@@ -74,6 +77,7 @@
                 android:text="Lights" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/button5"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
@@ -89,7 +93,8 @@
                 android:text="Outlets" />
 
             <Button
-                android:id="@+id/button5"
+                android:visibility="gone"
+                android:id="@+id/button6"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,7 +109,8 @@
                 android:text="Legs" />
 
             <Button
-                android:id="@+id/button5"
+                android:visibility="gone"
+                android:id="@+id/button7"
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

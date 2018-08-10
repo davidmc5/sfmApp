@@ -16,6 +16,7 @@
         android:paddingEnd="20dp">
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/switches"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,44 +27,44 @@
             android:textStyle="bold" />
 
         <Switch
-            android:id="@+id/sw_1"
+            android:id="@+id/bin_sw_1"
             style="@style/SingleSwitches"
-            android:text="sw_1" />
+            android:text="bin_sw_1" />
 
         <Switch
-            android:id="@+id/sw_2"
+            android:id="@+id/bin_sw_2"
             style="@style/SingleSwitches"
-            android:text="sw_2" />
+            android:text="bin_sw_2" />
 
         <Switch
-            android:id="@+id/sw_3"
+            android:id="@+id/bin_sw_3"
             style="@style/SingleSwitches"
-            android:text="sw_3" />
+            android:text="bin_sw_3" />
 
         <Switch
-            android:id="@+id/sw_4"
+            android:id="@+id/bin_sw_4"
             style="@style/SingleSwitches"
-            android:text="sw_4" />
+            android:text="bin_sw_4" />
 
         <Switch
-            android:id="@+id/sw_5"
+            android:id="@+id/bin_sw_5"
             style="@style/SingleSwitches"
-            android:text="sw_5" />
+            android:text="bin_sw_5" />
 
         <Switch
-            android:id="@+id/sw_6"
+            android:id="@+id/bin_sw_6"
             style="@style/SingleSwitches"
-            android:text="sw_6" />
+            android:text="bin_sw_6" />
 
         <Switch
-            android:id="@+id/sw_7"
+            android:id="@+id/bin_sw_7"
             style="@style/SingleSwitches"
-            android:text="sw_7" />
+            android:text="bin_sw_7" />
 
         <Switch
-            android:id="@+id/sw_8"
+            android:id="@+id/bin_sw_8"
             style="@style/SingleSwitches"
-            android:text="sw_8" />
+            android:text="bin_sw_8" />
 
     </LinearLayout>
 

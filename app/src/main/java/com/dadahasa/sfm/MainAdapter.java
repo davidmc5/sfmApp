@@ -62,6 +62,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainAdapterVie
          *
          * @param v The View that was clicked
          */
+
+        //TODO NOTE: This does not appear to be used at all.
+        // the onClisk is set directly on xml layout: android:onClick="openBinIntent"
+        // mMenuLabels does not appear to be initialized anywhere
+
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
