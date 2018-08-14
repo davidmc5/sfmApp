@@ -6,6 +6,7 @@ package com.dadahasa.sfm;
 
 import android.os.Bundle;
 import android.sax.RootElement;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -17,6 +18,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,12 +46,10 @@ public class BinFragment extends Fragment {
     String LABELS = ROOT_CHILD + "labels/";
     DataSnapshot rootData;
 
+    boolean dbUpdated = true;
+
     public static BinFragment getInstance(int position) {
         BinFragment binFragment = new BinFragment();
-
-
-
-
 
         Bundle bundle = new Bundle();
         bundle.putInt("pos", position);
@@ -72,9 +73,6 @@ public class BinFragment extends Fragment {
         //ViewPager mViewPager = getView().findViewById(R.id.viewPager);
         //position = mViewPager.getCurrentItem();
        // thisBin = "bin_" + String.valueOf(position+1) + '_';
-
-
-
     }
 
     @Override
@@ -112,7 +110,7 @@ public class BinFragment extends Fragment {
 
 
 
-        //Initialize all switches of the view with labels, state (on/off) and change listener (SwitchStatus)
+        //Initialize all switches of the view with labels, db state (on/off) and add change listener (SwitchStatus)
 
         //Collect all the switches (touchables) of the view in an array
         //https://stackoverflow.com/questions/22639218/how-to-get-all-buttons-ids-in-one-time-on-android
@@ -123,7 +121,7 @@ public class BinFragment extends Fragment {
         allSwitches = (getView().findViewById(R.id.single_activity)).getTouchables();
         //Log.d("SMF", "The number of switches is " + allSwitches.size());
 
-        //Look to set the SwitchState listener to all switches
+        //Set the SwitchState listener to all switches
         //the initial call may reset all the switches' values. Make sure we don't change the state of the database!!!
         for (int i = 0; i<allSwitches.size(); i++){
             int swId = allSwitches.get(i).getId();
@@ -135,12 +133,12 @@ public class BinFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //mDatabase.child("users").child("goodby").setValue(null); //this deletes the entry
 
-        //retrieve here the switch status from the database and set the UI switches
+        //retrieve here the switch status from the database to set the UI switches
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once when first attaching the listener and again
-                // whenever data at this location is updated.
+                // whenever data at this database location is updated.
 
                 Boolean value;
                 String label;
@@ -149,34 +147,66 @@ public class BinFragment extends Fragment {
                 Switch sw;
                 for (int i = 0; i<allSwitches.size(); i++) {
                     int swId = allSwitches.get(i).getId();
-                    sw = getActivity().findViewById(swId);
+                    ///////////////////////
+                    ////for debuging multiple clicks instability
 
                     try {
+                        sw = getActivity().findViewById(swId);
                         //get switch state from database (if any)
                         value = dataSnapshot.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).getValue(Boolean.class);
                         //and set the state of the UI switch to match the one on the database
                         sw.setChecked(value);
-                        //Log.d("HELLO", "\n############# THIS BIN: " + thisBin + "\n\");
+                        Log.d("HELLO", "\n############# THIS SWITCH: " + String.valueOf(i+1));
 
+/*
                     } catch (Exception e) {
                         //Log.d("database", "EXCEPTION -------- >>>>>: " + value);
                         //set default switch value false in the database if the switch does not exist.
                         //the listener currently is only set for changes, not additions.
                         mDatabase.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).setValue(false);
+                        Log.d("BIN FRAGMENT", "Switch ID " + swId);
                     }
+*/
 
-                    try {
-                        label = dataSnapshot.child(LABELS + thisBin + "sw_" + String.valueOf(i + 1)).getValue(String.class);
-                        //and set the label of the UI switch to match the one on the database
-                        if (!label.equals("")) {
-                            sw.setText(label);
+                        try {
+
+                            //TODO: do the following only once, maybe onCreate?
+                            //otherwise we are updating all labels every time a switch changes state!
+                            label = dataSnapshot.child(LABELS + thisBin + "sw_" + String.valueOf(i + 1)).getValue(String.class);
+                            //and set the label of the UI switch to match the one on the database
+                            if (!label.equals("")) {
+                                sw.setText(label);
+                            }
+                        }catch (Exception e){
+                            //Since label is missing, add a generic label stub to edit later
+                            String newLabel = "sw_" + String.valueOf(i+1);
+                            mDatabase.child(LABELS + thisBin + newLabel).setValue(newLabel);
+
+
                         }
-                    }catch (Exception e){
-                        //Since label is missing, add a generic label stub to edit later
 
-                        String newLabel = "sw_" + String.valueOf(i+1);
-                        mDatabase.child(LABELS + thisBin + newLabel).setValue(newLabel);
+                    } catch (Exception e) {
+                        Log.d("database", "EXCEPTION -------- >>>>>: " + e);
+                        //set default switch value false in the database if the switch does not exist.
+                        //the listener currently is only set for changes, not additions.
+                        mDatabase.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).setValue(false);
+                        Log.d("BIN FRAGMENT", "Switch ID " + swId);
                     }
+
+
+
+
+
+                    //TODO: Remove this debug code
+                    ////for debuging only
+                    //this delay is to debug a possible racing condition when a switch is clicked quickly.
+                    //what happens when the switch changes state? Does it send another change state notification?
+                    try {
+                        Thread.sleep(50);
+                    }catch(Exception e){
+                        //
+                    }
+
                 }
             }
 
@@ -193,7 +223,10 @@ public class BinFragment extends Fragment {
     // It will be called when a switch in one of the bin tabs has been clicked
     // it determines which switch has been clicked by the returned id.
     //It then sets the switch state on the database.
-    class SwitchState implements CompoundButton.OnCheckedChangeListener {
+
+    //////////////////////////////////////////////
+
+    class SwitchStateOld implements CompoundButton.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -237,13 +270,91 @@ public class BinFragment extends Fragment {
 
                 default:
                     break;
+            }
+        }
+    }
+///////////////////////////////////////////
+    class SwitchState implements CompoundButton.OnCheckedChangeListener {
+        String changedSwitch;
 
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            Log.d("SWITCH", "SWITCH CHANGED STATES");
+
+            if (true) {
+
+                dbUpdated = false;
+
+                switch (buttonView.getId()) {
+
+                    case R.id.bin_sw_1:
+                        //TODO For some unknown reason, this toast causeD crashes after a few toggles of the switch
+                        //Toast.makeText(getContext(), "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
+                        changedSwitch = SWITCHES + thisBin + "sw_1";
+                        //mDatabase.child(SWITCHES + thisBin + "sw_1").setValue(isChecked);
+                        break;
+
+                    case R.id.bin_sw_2:
+                        //mDatabase.child(SWITCHES  + thisBin + "sw_2").setValue(isChecked);
+                        changedSwitch = SWITCHES + thisBin + "sw_2";
+                        break;
+
+                    case R.id.bin_sw_3:
+                        //mDatabase.child(SWITCHES  + thisBin + "sw_3").setValue(isChecked);
+                        changedSwitch = SWITCHES + thisBin + "sw_3";
+                        break;
+
+                    case R.id.bin_sw_4:
+                        //mDatabase.child(SWITCHES  + thisBin + "sw_4").setValue(isChecked);
+                        changedSwitch = SWITCHES + thisBin + "sw_4";
+                        break;
+
+                    case R.id.bin_sw_5:
+                        //mDatabase.child(SWITCHES  + thisBin + "sw_5").setValue(isChecked);
+                        changedSwitch = SWITCHES + thisBin + "sw_5";
+                        break;
+
+                    case R.id.bin_sw_6:
+                        //mDatabase.child(SWITCHES  + thisBin + "sw_6").setValue(isChecked);
+                        changedSwitch = SWITCHES + thisBin + "sw_6";
+                        break;
+
+                    case R.id.bin_sw_7:
+                        //mDatabase.child(SWITCHES  + thisBin + "sw_7").setValue(isChecked);
+                        changedSwitch = SWITCHES + thisBin + "sw_7";
+                        break;
+
+                    case R.id.bin_sw_8:
+                        //mDatabase.child(SWITCHES  + thisBin + "sw_8").setValue(isChecked);
+                        changedSwitch = SWITCHES + thisBin + "sw_8";
+                        break;
+
+                    default:
+                        changedSwitch="";
+                        break;
+                }
             }
 
+            if (changedSwitch != "") {
+                mDatabase.child(changedSwitch).setValue(isChecked)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                dbUpdated = true;
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("database", "Did not update value (onCheckedChanged)");
+                                dbUpdated = true;
+                            }
+                        });
+            }
         }
-
     }
-
+///////////////////////////////////////////
 
     public void binPosition(int binPosition) {
         //position = binPosition;
