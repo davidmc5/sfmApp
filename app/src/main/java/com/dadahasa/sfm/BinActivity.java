@@ -54,7 +54,7 @@ public class BinActivity extends AppCompatActivity implements View.OnClickListen
                 //Capture the fragment instance to call one of its methods
                 getSupportFragmentManager().executePendingTransactions();
                 BinFragment binFragment = (BinFragment) getSupportFragmentManager().findFragmentById(R.id.viewPager);
-                binFragment.binPosition(position);
+                //binFragment.binPosition(position);
             }
         });
 

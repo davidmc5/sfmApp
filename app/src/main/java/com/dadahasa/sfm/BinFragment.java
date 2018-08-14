@@ -126,7 +126,18 @@ public class BinFragment extends Fragment {
         for (int i = 0; i<allSwitches.size(); i++){
             int swId = allSwitches.get(i).getId();
             Switch sw = view.findViewById(swId);
-            sw.setOnCheckedChangeListener(new SwitchState());
+
+            sw.setOnClickListener(new SwitchState());
+                    /*
+                @Override
+                public void onClick(View view) {
+
+                    Switch sw = (Switch) view;
+                    Boolean swState = sw.isChecked();
+                    String changedSwitch;
+                    //mDatabase.child(SWITCHES + thisBin + changedSwitch).setValue(swState);
+            });
+            */
         }
 
 
@@ -193,20 +204,6 @@ public class BinFragment extends Fragment {
                         Log.d("BIN FRAGMENT", "Switch ID " + swId);
                     }
 
-
-
-
-
-                    //TODO: Remove this debug code
-                    ////for debuging only
-                    //this delay is to debug a possible racing condition when a switch is clicked quickly.
-                    //what happens when the switch changes state? Does it send another change state notification?
-                    try {
-                        Thread.sleep(50);
-                    }catch(Exception e){
-                        //
-                    }
-
                 }
             }
 
@@ -225,72 +222,24 @@ public class BinFragment extends Fragment {
     //It then sets the switch state on the database.
 
     //////////////////////////////////////////////
-
-    class SwitchStateOld implements CompoundButton.OnCheckedChangeListener {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            //Log.d("database", "SW ID: " + buttonView.getId());
-
-            switch (buttonView.getId()) {
-
-                case R.id.bin_sw_1:
-                    //TODO For some unknown reason, this toast causeD crashes after a few toggles of the switch
-                    //Toast.makeText(getContext(), "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
-                    mDatabase.child(SWITCHES + thisBin + "sw_1").setValue(isChecked);
-                    break;
-
-                case R.id.bin_sw_2:
-                    mDatabase.child(SWITCHES  + thisBin + "sw_2").setValue(isChecked);
-                    break;
-
-                case R.id.bin_sw_3:
-                    mDatabase.child(SWITCHES  + thisBin + "sw_3").setValue(isChecked);
-                    break;
-
-                case R.id.bin_sw_4:
-                    mDatabase.child(SWITCHES  + thisBin + "sw_4").setValue(isChecked);
-                    break;
-
-                case R.id.bin_sw_5:
-                    mDatabase.child(SWITCHES  + thisBin + "sw_5").setValue(isChecked);
-                    break;
-
-                case R.id.bin_sw_6:
-                    mDatabase.child(SWITCHES  + thisBin + "sw_6").setValue(isChecked);
-                    break;
-
-                case R.id.bin_sw_7:
-                    mDatabase.child(SWITCHES  + thisBin + "sw_7").setValue(isChecked);
-                    break;
-
-                case R.id.bin_sw_8:
-                    mDatabase.child(SWITCHES  + thisBin + "sw_8").setValue(isChecked);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
 ///////////////////////////////////////////
-    class SwitchState implements CompoundButton.OnCheckedChangeListener {
+
+
+    class SwitchState implements CompoundButton.OnClickListener {
         String changedSwitch;
 
         @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        public void onClick(View view) {
 
             Log.d("SWITCH", "SWITCH CHANGED STATES");
 
-            if (true) {
+            Switch sw = (Switch) view;
+            Boolean swState = sw.isChecked();
+            String changedSwitch;
 
-                dbUpdated = false;
-
-                switch (buttonView.getId()) {
+            switch (view.getId()) {
 
                     case R.id.bin_sw_1:
-                        //TODO For some unknown reason, this toast causeD crashes after a few toggles of the switch
-                        //Toast.makeText(getContext(), "The Switch is " + (isChecked ? "on" : "off"), Toast.LENGTH_SHORT).show();
                         changedSwitch = SWITCHES + thisBin + "sw_1";
                         //mDatabase.child(SWITCHES + thisBin + "sw_1").setValue(isChecked);
                         break;
@@ -331,34 +280,17 @@ public class BinFragment extends Fragment {
                         break;
 
                     default:
-                        changedSwitch="";
+                        changedSwitch="X";
                         break;
-                }
             }
+            mDatabase.child(changedSwitch).setValue(swState);
 
-            if (changedSwitch != "") {
-                mDatabase.child(changedSwitch).setValue(isChecked)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                dbUpdated = true;
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("database", "Did not update value (onCheckedChanged)");
-                                dbUpdated = true;
-                            }
-                        });
-            }
         }
     }
-///////////////////////////////////////////
-
+/*
     public void binPosition(int binPosition) {
         //position = binPosition;
     }
 
-
+*/
     }
