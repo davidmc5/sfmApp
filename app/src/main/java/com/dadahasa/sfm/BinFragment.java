@@ -36,6 +36,7 @@ public class BinFragment extends Fragment {
 
     private TextView textView;
     private DatabaseReference mDatabase;
+    private ValueEventListener listener;
 
     //controller id hardcoded! Read it instead from the app's shared preferences.
     //TODO add a settings menu to enter the controller's ID.
@@ -87,10 +88,6 @@ public class BinFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-
-
 
 ////
         //ViewPager mViewPager = getActivity().findViewById(R.id.viewPager);
@@ -144,8 +141,13 @@ public class BinFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         //mDatabase.child("users").child("goodby").setValue(null); //this deletes the entry
 
+
+ // /*
+   /// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
         //retrieve here the switch status from the database to set the UI switches
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        //**mDatabase.addValueEventListener(new ValueEventListener() {
+        listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once when first attaching the listener and again
@@ -155,8 +157,9 @@ public class BinFragment extends Fragment {
                 String label;
 
                 rootData = dataSnapshot.child("controllers").child(THIS_CONTROLLER);
+
                 Switch sw;
-                for (int i = 0; i<allSwitches.size(); i++) {
+                for (int i = 0; i < allSwitches.size(); i++) {
                     int swId = allSwitches.get(i).getId();
                     ///////////////////////
                     ////for debuging multiple clicks instability
@@ -164,20 +167,11 @@ public class BinFragment extends Fragment {
                     try {
                         sw = getActivity().findViewById(swId);
                         //get switch state from database (if any)
-                        value = dataSnapshot.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).getValue(Boolean.class);
+                        value = dataSnapshot.child(SWITCHES + thisBin + "sw_" + String.valueOf(i + 1)).getValue(Boolean.class);
                         //and set the state of the UI switch to match the one on the database
                         sw.setChecked(value);
-                        Log.d("HELLO", "\n############# THIS SWITCH: " + String.valueOf(i+1));
+                        Log.d("HELLO", "\n############# THIS SWITCH: " + String.valueOf(i + 1));
 
-/*
-                    } catch (Exception e) {
-                        //Log.d("database", "EXCEPTION -------- >>>>>: " + value);
-                        //set default switch value false in the database if the switch does not exist.
-                        //the listener currently is only set for changes, not additions.
-                        mDatabase.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).setValue(false);
-                        Log.d("BIN FRAGMENT", "Switch ID " + swId);
-                    }
-*/
 
                         try {
 
@@ -188,9 +182,9 @@ public class BinFragment extends Fragment {
                             if (!label.equals("")) {
                                 sw.setText(label);
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             //Since label is missing, add a generic label stub to edit later
-                            String newLabel = "sw_" + String.valueOf(i+1);
+                            String newLabel = "sw_" + String.valueOf(i + 1);
                             mDatabase.child(LABELS + thisBin + newLabel).setValue(newLabel);
 
 
@@ -200,19 +194,27 @@ public class BinFragment extends Fragment {
                         Log.d("database", "EXCEPTION -------- >>>>>: " + e);
                         //set default switch value false in the database if the switch does not exist.
                         //the listener currently is only set for changes, not additions.
-                        mDatabase.child(SWITCHES + thisBin + "sw_" + String.valueOf(i+1)).setValue(false);
+                        mDatabase.child(SWITCHES + thisBin + "sw_" + String.valueOf(i + 1)).setValue(false);
                         Log.d("BIN FRAGMENT", "Switch ID " + swId);
                     }
 
                 }
             }
 
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 Log.w("database", "Failed to read value.", error.toException());
             }
-        });
+        };
+        //**});
+
+        mDatabase.addValueEventListener(listener);
+
+ ///^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// */
+
     }
 
 
@@ -287,6 +289,15 @@ public class BinFragment extends Fragment {
 
         }
     }
+
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mDatabase.removeEventListener(listener);
+
+    }
+
 /*
     public void binPosition(int binPosition) {
         //position = binPosition;
