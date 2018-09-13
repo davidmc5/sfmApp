@@ -4,12 +4,15 @@ package com.dadahasa.sfm;
  * Created by David on 2/20/2018.
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.sax.RootElement;
-import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
+
 import android.support.annotation.Nullable;
+//import android.support.v4.app.Fragment;
+
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +20,20 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class BinFragment extends Fragment {
 
@@ -35,19 +42,25 @@ public class BinFragment extends Fragment {
     static int position;
 
     private TextView textView;
+    //private TextView sensor1;
+
     private DatabaseReference mDatabase;
     private ValueEventListener listener;
 
     //controller id hardcoded! Read it instead from the app's shared preferences.
     //TODO add a settings menu to enter the controller's ID.
-    final String THIS_CONTROLLER = "6123286909";
+    String THIS_CONTROLLER = "TEST-01";
     String thisBin;
-    String ROOT_CHILD = "controllers/" + THIS_CONTROLLER + "/";
-    String SWITCHES = ROOT_CHILD + "switches/";
-    String LABELS = ROOT_CHILD + "labels/";
-    DataSnapshot rootData;
+    String ROOT_CHILD;
+    String SWITCHES;
+    String LABELS;
+    String SENSORS;
+
+
 
     boolean dbUpdated = true;
+    SharedPreferences mSharedPreference;
+    public static String preference = "myPrefFile";
 
     public static BinFragment getInstance(int position) {
         BinFragment binFragment = new BinFragment();
@@ -55,13 +68,13 @@ public class BinFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putInt("pos", position);
 
-        Log.d("BUNDLE", "\n\n############# POSITION BUNDLE: " + position + "\n");
+        //Log.d("BUNDLE", "\n\n############# POSITION BUNDLE: " + position + "\n");
         binFragment.setArguments(bundle);
         return binFragment;
     }
 
     //TODO 2: the fragment class is called twice since the adaptor is pre fetching the next view
-    // so the position variable is updated twice with two consequtive numbers
+    // so the position variable is updated twice with two consecutive numbers
     //need to either get the position from the tab listener into the fragment,
     // or make methods static so that it only gets updated once for each tab's fragment instance
 
@@ -69,11 +82,41 @@ public class BinFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getArguments().getInt("pos");
-        //Log.d("POSITION", "\n\n############# POSITION AFTER: " + position + "\n");
+        Log.d("POSITION", "\n\n############# POSITION AFTER: " + position + "\n");
 
         //ViewPager mViewPager = getView().findViewById(R.id.viewPager);
         //position = mViewPager.getCurrentItem();
        // thisBin = "bin_" + String.valueOf(position+1) + '_';
+
+
+        //GET PREFERENCE FOR CONTROLLER ID
+
+        ///LOGS ARE NOT WORKING HERE!!!! ????
+        //Log.d("CONTROLLER ID= ", "\n\n\n\n\n\n\n\n\n\n\n TEST LINE!!!!!!!!!! \n\n\n\n\n\n\n\n\n\n\n");
+
+
+        //try with a specific preference file:
+        mSharedPreference = getContext().getSharedPreferences(preference, Context.MODE_PRIVATE);
+
+        //since this is a fragment, we need to get the context of the activity
+         //mSharedPreference =  PreferenceManager.getDefaultSharedPreferences(getContext());
+
+
+        if (mSharedPreference.contains("CONTROLLER_ID")) {
+            THIS_CONTROLLER = mSharedPreference.getString("CONTROLLER_ID", "demo");
+            Toast.makeText(getContext(), THIS_CONTROLLER, Toast.LENGTH_LONG).show();
+        }else{
+            //Store default value
+            SharedPreferences.Editor editor = mSharedPreference.edit();
+            editor.putString("CONTROLLER_ID", "demo");
+            editor.apply();
+        }
+        //set the database references for this controller
+        ROOT_CHILD = "controllers/" + THIS_CONTROLLER + "/";
+        SWITCHES = ROOT_CHILD + "switches/";
+        LABELS = ROOT_CHILD + "labels/";
+        SENSORS = ROOT_CHILD + "sensors/";
+
     }
 
     @Override
@@ -86,6 +129,7 @@ public class BinFragment extends Fragment {
     }
 
     @Override
+    //this runs immediately after the view has been created
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -100,11 +144,22 @@ public class BinFragment extends Fragment {
         textView = view.findViewById(R.id.binId);
 
         //TODO get bin label from firebase
-        Log.d("POSITION", "\n############# TRALARA: " + position + "\n");
+        //Log.d("POSITION", "\n############# TRALARA: " + position + "\n");
         //TODO removed for single activity
         //textView.setText("Bin " + String.valueOf(position + 1));
         //Log.d("POSITION", "\n############# POSITION: " + position + "\n");
 
+
+        //// get the view for the sensors
+        final TextView sensor1 = view.findViewById(R.id.sensor1);
+        final TextView sensor2 = view.findViewById(R.id.sensor2);
+        final TextView sensor3 = view.findViewById(R.id.sensor3);
+        final TextView sensor4 = view.findViewById(R.id.sensor4);
+        final TextView sensor5 = view.findViewById(R.id.sensor5);
+        final TextView sensor6 = view.findViewById(R.id.sensor6);
+        final TextView sensor7 = view.findViewById(R.id.sensor7);
+        final TextView sensor8 = view.findViewById(R.id.sensor8);
+        final List<TextView> sensors = Arrays.asList(sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8);
 
 
         //Initialize all switches of the view with labels, db state (on/off) and add change listener (SwitchStatus)
@@ -124,26 +179,15 @@ public class BinFragment extends Fragment {
             int swId = allSwitches.get(i).getId();
             Switch sw = view.findViewById(swId);
 
+            //Note: setOnClickListener triggers events only on user action
+            // setOnCheckedChangeListener triggers events on any status changes, even if done by code (.setChecked)
             sw.setOnClickListener(new SwitchState());
-                    /*
-                @Override
-                public void onClick(View view) {
-
-                    Switch sw = (Switch) view;
-                    Boolean swState = sw.isChecked();
-                    String changedSwitch;
-                    //mDatabase.child(SWITCHES + thisBin + changedSwitch).setValue(swState);
-            });
-            */
         }
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        //mDatabase.child("users").child("goodby").setValue(null); //this deletes the entry
+        //mDatabase.child("users").child("goodbye").setValue(null); //this deletes the entry
 
-
- // /*
-   /// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
         //retrieve here the switch status from the database to set the UI switches
         //**mDatabase.addValueEventListener(new ValueEventListener() {
@@ -156,7 +200,9 @@ public class BinFragment extends Fragment {
                 Boolean value;
                 String label;
 
-                rootData = dataSnapshot.child("controllers").child(THIS_CONTROLLER);
+                //String sensorValue;
+
+                //rootData = dataSnapshot.child("controller_activity").child(THIS_CONTROLLER);
 
                 Switch sw;
                 for (int i = 0; i < allSwitches.size(); i++) {
@@ -170,24 +216,27 @@ public class BinFragment extends Fragment {
                         value = dataSnapshot.child(SWITCHES + thisBin + "sw_" + String.valueOf(i + 1)).getValue(Boolean.class);
                         //and set the state of the UI switch to match the one on the database
                         sw.setChecked(value);
-                        Log.d("HELLO", "\n############# THIS SWITCH: " + String.valueOf(i + 1));
+                        //Log.d("HELLO", "\n############# THIS SWITCH: " + String.valueOf(i + 1));
 
 
                         try {
 
                             //TODO: do the following only once, maybe onCreate?
                             //otherwise we are updating all labels every time a switch changes state!
+
                             label = dataSnapshot.child(LABELS + thisBin + "sw_" + String.valueOf(i + 1)).getValue(String.class);
                             //and set the label of the UI switch to match the one on the database
                             if (!label.equals("")) {
                                 sw.setText(label);
+                                sw.setVisibility(View.VISIBLE);
                             }
                         } catch (Exception e) {
-                            //Since label is missing, add a generic label stub to edit later
+                            //Since label is missing, add a generic (BLANK) label stub to db to edit later
                             String newLabel = "sw_" + String.valueOf(i + 1);
-                            mDatabase.child(LABELS + thisBin + newLabel).setValue(newLabel);
-
-
+                            //mDatabase.child(LABELS + thisBin + newLabel).setValue(newLabel);
+                            mDatabase.child(LABELS + thisBin + newLabel).setValue("");
+                            //Do not show a blank switch until it has a label
+                            sw.setVisibility(View.INVISIBLE);
                         }
 
                     } catch (Exception e) {
@@ -197,8 +246,12 @@ public class BinFragment extends Fragment {
                         mDatabase.child(SWITCHES + thisBin + "sw_" + String.valueOf(i + 1)).setValue(false);
                         Log.d("BIN FRAGMENT", "Switch ID " + swId);
                     }
-
                 }
+
+                //TODO: display two sensors
+                //Retrieve and display sensor data changes
+                //get new sensor readings from database (if any)
+                displaySensorValue(dataSnapshot, sensors);
             }
 
 
@@ -208,32 +261,35 @@ public class BinFragment extends Fragment {
                 Log.w("database", "Failed to read value.", error.toException());
             }
         };
-        //**});
-
-        mDatabase.addValueEventListener(listener);
-
- ///^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-// */
-
     }
 
+    void displaySensorValue(DataSnapshot dataSnapshot,  List<TextView> sensors){
+        List<String> labels = Arrays.asList("c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8");
+
+        for (int n = 0; n < labels.size(); n++){
+
+            String sensorValue = dataSnapshot.child(SENSORS + labels.get(n)).getValue(String.class);
+            if (parseInteger(sensorValue) != 0) {
+                sensors.get(n).setText(sensorValue + " A");
+                sensors.get(n).setVisibility(View.VISIBLE);
+            }else{
+                sensors.get(n).setVisibility(View.INVISIBLE);
+            }
+        }
+    }
 
     //this listener class needs to be attached to each switch
     // It will be called when a switch in one of the bin tabs has been clicked
     // it determines which switch has been clicked by the returned id.
     //It then sets the switch state on the database.
 
-    //////////////////////////////////////////////
-///////////////////////////////////////////
-
-
     class SwitchState implements CompoundButton.OnClickListener {
-        String changedSwitch;
+        //String changedSwitch;
 
         @Override
         public void onClick(View view) {
 
-            Log.d("SWITCH", "SWITCH CHANGED STATES");
+            //Log.d("SWITCH", "SWITCH CHANGED STATES");
 
             Switch sw = (Switch) view;
             Boolean swState = sw.isChecked();
@@ -243,41 +299,33 @@ public class BinFragment extends Fragment {
 
                     case R.id.bin_sw_1:
                         changedSwitch = SWITCHES + thisBin + "sw_1";
-                        //mDatabase.child(SWITCHES + thisBin + "sw_1").setValue(isChecked);
                         break;
 
                     case R.id.bin_sw_2:
-                        //mDatabase.child(SWITCHES  + thisBin + "sw_2").setValue(isChecked);
                         changedSwitch = SWITCHES + thisBin + "sw_2";
                         break;
 
                     case R.id.bin_sw_3:
-                        //mDatabase.child(SWITCHES  + thisBin + "sw_3").setValue(isChecked);
                         changedSwitch = SWITCHES + thisBin + "sw_3";
                         break;
 
                     case R.id.bin_sw_4:
-                        //mDatabase.child(SWITCHES  + thisBin + "sw_4").setValue(isChecked);
                         changedSwitch = SWITCHES + thisBin + "sw_4";
                         break;
 
                     case R.id.bin_sw_5:
-                        //mDatabase.child(SWITCHES  + thisBin + "sw_5").setValue(isChecked);
                         changedSwitch = SWITCHES + thisBin + "sw_5";
                         break;
 
                     case R.id.bin_sw_6:
-                        //mDatabase.child(SWITCHES  + thisBin + "sw_6").setValue(isChecked);
                         changedSwitch = SWITCHES + thisBin + "sw_6";
                         break;
 
                     case R.id.bin_sw_7:
-                        //mDatabase.child(SWITCHES  + thisBin + "sw_7").setValue(isChecked);
                         changedSwitch = SWITCHES + thisBin + "sw_7";
                         break;
 
                     case R.id.bin_sw_8:
-                        //mDatabase.child(SWITCHES  + thisBin + "sw_8").setValue(isChecked);
                         changedSwitch = SWITCHES + thisBin + "sw_8";
                         break;
 
@@ -286,22 +334,39 @@ public class BinFragment extends Fragment {
                         break;
             }
             mDatabase.child(changedSwitch).setValue(swState);
-
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mDatabase.addValueEventListener(listener);
+        //Optionally, use use instead addListenerForSingleValueEvent(),
+        // that automatically detaches listener onPause()
+        //so it wouldn't need to be removed on onPause
     }
 
 
     @Override
     public void onPause(){
         super.onPause();
+        //When the device goes to sleep, the following code will remove the listener.
+        //need to add the listener back on onResume()!
         mDatabase.removeEventListener(listener);
+    }
 
+    public int parseInteger(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch(NumberFormatException nfe) {
+            // Log exception.
+            return 0;
+        }
     }
 
 /*
     public void binPosition(int binPosition) {
         //position = binPosition;
     }
-
 */
-    }
+}

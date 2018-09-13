@@ -1,72 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<ScrollView android:layout_width="match_parent"
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="10dp"
     android:id="@+id/single_activity"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical"
-        android:paddingEnd="20dp">
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/switches"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Devices"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+        android:orientation="vertical">
 
         <Switch
             android:id="@+id/bin_sw_1"
+            android:text="bin_sw_1"
             style="@style/SingleSwitches"
-            android:text="bin_sw_1" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor1"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/sensor1"
+            style="@style/amps_textviews"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_1"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_1"
+            android:visibility="invisible"/>
+
 
         <Switch
             android:id="@+id/bin_sw_2"
+            android:text="bin_sw_2"
             style="@style/SingleSwitches"
-            android:text="bin_sw_2" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor2"
+            app:layout_constraintTop_toBottomOf="@id/bin_sw_1"/>
+
+        <TextView
+            android:id="@+id/sensor2"
+            style="@style/amps_textviews"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_2"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_2"
+            android:visibility="invisible"/>
+
 
         <Switch
             android:id="@+id/bin_sw_3"
             style="@style/SingleSwitches"
-            android:text="bin_sw_3" />
+            android:text="bin_sw_3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor3"
+            app:layout_constraintTop_toBottomOf="@+id/bin_sw_2"/>
+
+        <TextView
+            android:id="@+id/sensor3"
+            style="@style/amps_textviews"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_3"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_3"
+            android:visibility="invisible"/>
+
 
         <Switch
             android:id="@+id/bin_sw_4"
             style="@style/SingleSwitches"
-            android:text="bin_sw_4" />
+            android:text="bin_sw_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor4"
+            app:layout_constraintTop_toBottomOf="@+id/bin_sw_3" />
+
+        <TextView
+            android:id="@+id/sensor4"
+            style="@style/amps_textviews"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_4"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_4"
+            android:visibility="invisible"/>
 
         <Switch
             android:id="@+id/bin_sw_5"
             style="@style/SingleSwitches"
-            android:text="bin_sw_5" />
+            android:text="bin_sw_5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor5"
+            app:layout_constraintTop_toBottomOf="@+id/bin_sw_4" />
+
+        <TextView
+            android:id="@+id/sensor5"
+            style="@style/amps_textviews"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_5"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_5"
+            android:visibility="invisible"/>
 
         <Switch
             android:id="@+id/bin_sw_6"
             style="@style/SingleSwitches"
-            android:text="bin_sw_6" />
+            android:text="bin_sw_6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor6"
+            app:layout_constraintTop_toBottomOf="@+id/bin_sw_5" />
+
+        <TextView
+            android:id="@+id/sensor6"
+            style="@style/amps_textviews"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_6"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_6"
+            android:visibility="invisible"/>
 
         <Switch
             android:id="@+id/bin_sw_7"
             style="@style/SingleSwitches"
-            android:text="bin_sw_7" />
+            android:text="bin_sw_7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor7"
+            app:layout_constraintTop_toBottomOf="@+id/bin_sw_6" />
+
+        <TextView
+            android:id="@+id/sensor7"
+            style="@style/amps_textviews"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_7"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_7"
+            android:visibility="invisible"/>
 
         <Switch
             android:id="@+id/bin_sw_8"
             style="@style/SingleSwitches"
-            android:text="bin_sw_8" />
+            android:text="bin_sw_8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/sensor8"
+            app:layout_constraintTop_toBottomOf="@+id/bin_sw_7" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/sensor8"
+            style="@style/amps_textviews"
+            app:layout_constraintBottom_toBottomOf="@+id/bin_sw_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bin_sw_8"
+            app:layout_constraintTop_toTopOf="@+id/bin_sw_8"
+            android:visibility="invisible"/>
+
+    </android.support.constraint.ConstraintLayout>
 
 </ScrollView>
 

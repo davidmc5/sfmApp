@@ -1,13 +1,19 @@
 package com.dadahasa.sfm;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.support.v7.widget.LinearLayoutManager;
 //import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -49,12 +55,42 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.controller:
+                //Toast.makeText(this, "Controller selected", Toast.LENGTH_SHORT).show();
+                Intent startControllerActivity = new Intent (this, ControllerActivity.class);
+                startActivity(startControllerActivity);
+                return true;
+
+                //break;
+
+            default:
+                break;
+        }
+        return true;
+    }
+
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_activity);
         //setContentView(R.layout.single_main_activity);
         //mBinButton = findViewById(R.id.button1);
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
 
         //// Initialize Firebase Components
@@ -81,8 +117,9 @@ public class MainActivity extends AppCompatActivity {
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.EmailBuilder().build(),
-                                            new AuthUI.IdpConfig.GoogleBuilder().build()))
+                                            //new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                            new AuthUI.IdpConfig.EmailBuilder().build()
+                                            ))
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -187,4 +224,7 @@ public class MainActivity extends AppCompatActivity {
     public void notImplemented(View view){
         Toast.makeText(getApplicationContext(),"Not Yet Implemented!", Toast.LENGTH_SHORT).show();
     }
+
+
+
 }

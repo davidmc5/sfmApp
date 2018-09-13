@@ -30,7 +30,7 @@ public class BinActivity extends AppCompatActivity implements View.OnClickListen
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLUE));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
 
         // Associate the ViewPager with a new instance of our adapter
         viewPager = findViewById(R.id.viewPager);
