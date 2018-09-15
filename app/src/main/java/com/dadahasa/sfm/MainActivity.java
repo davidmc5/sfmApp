@@ -2,6 +2,8 @@ package com.dadahasa.sfm;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -71,13 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startControllerActivity);
                 return true;
 
-                //break;
-
             default:
-                break;
+                return super.onOptionsItemSelected(item);
         }
-        return true;
-    }
+        //return true;
+}
 
 
 
@@ -86,11 +85,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_activity);
-        //setContentView(R.layout.single_main_activity);
-        //mBinButton = findViewById(R.id.button1);
 
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+        //TODO the action bar overflow button can't be clicked on the tablet
+        //trying different things to make it work...
+        //getSupportActionBar().setHomeButtonEnabled(true);
+
 
 
         //// Initialize Firebase Components

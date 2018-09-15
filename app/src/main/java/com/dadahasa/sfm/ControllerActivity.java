@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import static java.security.AccessController.getContext;
 
 public class ControllerActivity extends AppCompatActivity {
 
@@ -44,7 +47,10 @@ public class ControllerActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 //boolean handled = false;
-                if (event != null) {
+                //davidToast.makeText(getApplicationContext(),"ON EDIT ACTION" + String.valueOf(actionId), Toast.LENGTH_LONG).show();
+                if (actionId == 6) {
+                    ////////////////////
+                    //Toast.makeText(getApplicationContext(),"PRESSED DONE", Toast.LENGTH_LONG).show();
                     //"enter" key was pressed
                     //store value and return to previous activity
                     thisController = v.getText().toString();
@@ -54,8 +60,9 @@ public class ControllerActivity extends AppCompatActivity {
                     finish();
                 }return true;
             }
-
         });
+
+
 
 
 

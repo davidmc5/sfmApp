@@ -48,7 +48,7 @@ public class BinActivity extends AppCompatActivity implements View.OnClickListen
                 //pass this to the fragment
                 //the position returned by this listener's call back is reliable
                 // but it needs to be passed to the tab's fragment
-                Log.d("POSITION", "\n############# REAL POSITION: " + position + "\n");
+                //g.d("POSITION", "\n############# REAL POSITION: " + position + "\n");
 
                 //pass position to fragment ----> This is not working well
                 //Capture the fragment instance to call one of its methods

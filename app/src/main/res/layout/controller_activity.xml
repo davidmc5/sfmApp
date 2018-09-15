@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@android:style/Theme.Holo.Light">
+    android:theme="@android:style/Theme.Holo.Light.NoActionBar">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/controller_toolbar"
@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/controller_id"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:imeOptions="actionDone"/>
 
 </LinearLayout>

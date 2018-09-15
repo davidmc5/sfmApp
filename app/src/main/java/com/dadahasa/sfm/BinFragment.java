@@ -49,7 +49,7 @@ public class BinFragment extends Fragment {
 
     //controller id hardcoded! Read it instead from the app's shared preferences.
     //TODO add a settings menu to enter the controller's ID.
-    String THIS_CONTROLLER = "TEST-01";
+    String THIS_CONTROLLER = "demo";
     String thisBin;
     String ROOT_CHILD;
     String SWITCHES;
@@ -104,7 +104,7 @@ public class BinFragment extends Fragment {
 
         if (mSharedPreference.contains("CONTROLLER_ID")) {
             THIS_CONTROLLER = mSharedPreference.getString("CONTROLLER_ID", "demo");
-            Toast.makeText(getContext(), THIS_CONTROLLER, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), THIS_CONTROLLER, Toast.LENGTH_LONG).show();
         }else{
             //Store default value
             SharedPreferences.Editor editor = mSharedPreference.edit();
@@ -159,7 +159,11 @@ public class BinFragment extends Fragment {
         final TextView sensor6 = view.findViewById(R.id.sensor6);
         final TextView sensor7 = view.findViewById(R.id.sensor7);
         final TextView sensor8 = view.findViewById(R.id.sensor8);
-        final List<TextView> sensors = Arrays.asList(sensor1, sensor2, sensor3, sensor4, sensor5, sensor6, sensor7, sensor8);
+        final TextView sensor9 = view.findViewById(R.id.sensor9);
+        final TextView sensor10 = view.findViewById(R.id.sensor10);
+        final List<TextView> sensors = Arrays.asList(
+                sensor1, sensor2, sensor3, sensor4, sensor5,
+                sensor6, sensor7, sensor8, sensor9, sensor10);
 
 
         //Initialize all switches of the view with labels, db state (on/off) and add change listener (SwitchStatus)
@@ -171,6 +175,7 @@ public class BinFragment extends Fragment {
         //TODO replaced for single activity
         //allSwitches = (getView().findViewById(R.id.switch_container)).getTouchables();
         allSwitches = (getView().findViewById(R.id.single_activity)).getTouchables();
+        //The switches invisible will not be counted! Make sure to turn the visibility off after this count!!!
         //Log.d("SMF", "The number of switches is " + allSwitches.size());
 
         //Set the SwitchState listener to all switches
@@ -196,6 +201,7 @@ public class BinFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once when first attaching the listener and again
                 // whenever data at this database location is updated.
+                //Toast.makeText(getContext(), "DATA CHANGE CALLED", Toast.LENGTH_LONG).show();
 
                 Boolean value;
                 String label;
@@ -203,12 +209,13 @@ public class BinFragment extends Fragment {
                 //String sensorValue;
 
                 //rootData = dataSnapshot.child("controller_activity").child(THIS_CONTROLLER);
-
+                //Log.d("HELLO", "\n############# THIS SWITCH1: " );
                 Switch sw;
                 for (int i = 0; i < allSwitches.size(); i++) {
                     int swId = allSwitches.get(i).getId();
                     ///////////////////////
                     ////for debuging multiple clicks instability
+                    //Log.d("HELLO", "\n############# THIS SWITCH2: " + String.valueOf(i + 1));
 
                     try {
                         sw = getActivity().findViewById(swId);
@@ -216,7 +223,7 @@ public class BinFragment extends Fragment {
                         value = dataSnapshot.child(SWITCHES + thisBin + "sw_" + String.valueOf(i + 1)).getValue(Boolean.class);
                         //and set the state of the UI switch to match the one on the database
                         sw.setChecked(value);
-                        //Log.d("HELLO", "\n############# THIS SWITCH: " + String.valueOf(i + 1));
+                        //Log.d("HELLO", "\n############# THIS SWITCH3: " + String.valueOf(i + 1));
 
 
                         try {
@@ -226,9 +233,15 @@ public class BinFragment extends Fragment {
 
                             label = dataSnapshot.child(LABELS + thisBin + "sw_" + String.valueOf(i + 1)).getValue(String.class);
                             //and set the label of the UI switch to match the one on the database
+                            //Toast.makeText(getContext(), "Label" + label, Toast.LENGTH_LONG).show();
+                            //Log.d("LABELS", "\n############# THIS LABEL: " + label);
+
                             if (!label.equals("")) {
                                 sw.setText(label);
                                 sw.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                sw.setVisibility(View.INVISIBLE);
                             }
                         } catch (Exception e) {
                             //Since label is missing, add a generic (BLANK) label stub to db to edit later
@@ -264,7 +277,9 @@ public class BinFragment extends Fragment {
     }
 
     void displaySensorValue(DataSnapshot dataSnapshot,  List<TextView> sensors){
-        List<String> labels = Arrays.asList("c_1", "c_2", "c_3", "c_4", "c_5", "c_6", "c_7", "c_8");
+        List<String> labels = Arrays.asList(
+                "c_1", "c_2", "c_3", "c_4", "c_5",
+                "c_6", "c_7", "c_8", "c_9", "c_10");
 
         for (int n = 0; n < labels.size(); n++){
 
@@ -297,41 +312,49 @@ public class BinFragment extends Fragment {
 
             switch (view.getId()) {
 
-                    case R.id.bin_sw_1:
-                        changedSwitch = SWITCHES + thisBin + "sw_1";
-                        break;
+                case R.id.bin_sw_1:
+                    changedSwitch = SWITCHES + thisBin + "sw_1";
+                    break;
 
-                    case R.id.bin_sw_2:
-                        changedSwitch = SWITCHES + thisBin + "sw_2";
-                        break;
+                case R.id.bin_sw_2:
+                    changedSwitch = SWITCHES + thisBin + "sw_2";
+                    break;
 
-                    case R.id.bin_sw_3:
-                        changedSwitch = SWITCHES + thisBin + "sw_3";
-                        break;
+                case R.id.bin_sw_3:
+                    changedSwitch = SWITCHES + thisBin + "sw_3";
+                    break;
 
-                    case R.id.bin_sw_4:
-                        changedSwitch = SWITCHES + thisBin + "sw_4";
-                        break;
+                case R.id.bin_sw_4:
+                    changedSwitch = SWITCHES + thisBin + "sw_4";
+                    break;
 
-                    case R.id.bin_sw_5:
-                        changedSwitch = SWITCHES + thisBin + "sw_5";
-                        break;
+                case R.id.bin_sw_5:
+                    changedSwitch = SWITCHES + thisBin + "sw_5";
+                    break;
 
-                    case R.id.bin_sw_6:
-                        changedSwitch = SWITCHES + thisBin + "sw_6";
-                        break;
+                case R.id.bin_sw_6:
+                    changedSwitch = SWITCHES + thisBin + "sw_6";
+                    break;
 
-                    case R.id.bin_sw_7:
-                        changedSwitch = SWITCHES + thisBin + "sw_7";
-                        break;
+                case R.id.bin_sw_7:
+                    changedSwitch = SWITCHES + thisBin + "sw_7";
+                    break;
 
-                    case R.id.bin_sw_8:
-                        changedSwitch = SWITCHES + thisBin + "sw_8";
-                        break;
+                case R.id.bin_sw_8:
+                    changedSwitch = SWITCHES + thisBin + "sw_8";
+                    break;
 
-                    default:
-                        changedSwitch="X";
-                        break;
+                case R.id.bin_sw_9:
+                    changedSwitch = SWITCHES + thisBin + "sw_9";
+                    break;
+
+                case R.id.bin_sw_10:
+                    changedSwitch = SWITCHES + thisBin + "sw_10";
+                    break;
+
+                default:
+                    changedSwitch="X";
+                    break;
             }
             mDatabase.child(changedSwitch).setValue(swState);
         }
